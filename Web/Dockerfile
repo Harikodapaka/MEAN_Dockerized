@@ -25,19 +25,22 @@
 
 #CMD ["npm","start"]
 
-# ------------------------------------------>  from mhart/alpine-node:6.11 image
+# ------------------------------------------>  from mhart/alpine-node:10 image
 
-FROM mhart/alpine-node:6.11
+# Installs the current application on a Node Image.
+FROM mhart/alpine-node:10
 
-ENV NODE_PATH /app/node_modules
+ENV NODE_ROOT /usr/app/
+# Creates the directory and all the parents (if they don’t exist)
+RUN mkdir -p $NODE_ROOT
+# Sets the /usr/app as the active directory
+WORKDIR $NODE_ROOT
+# Copies all the content
+COPY . .
+# Install all the packages
+RUN npm install -g @angular/cli
+RUN npm install
 
-ADD package.json /app/package.json
-
-RUN cd /app && npm install
-#RUN npm cache clean
-ADD . /app/src
-
-WORKDIR /app/src
-EXPOSE  4200
+EXPOSE 4200
 
 CMD ["npm", "start"]

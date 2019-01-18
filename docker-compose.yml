@@ -1,13 +1,10 @@
 version: "3"
 
 services:
-
-  client_web:
-    build: Web
-    ports:
-      - "4200:4200"
-    volumes:
-      - ./Web:/app/src
+  database:
+      image: mvertes/alpine-mongo
+      ports:
+        - "27017:27017"
   server-app:
     build: Server
     ports:
@@ -16,7 +13,10 @@ services:
       - ./Server:/app/src
     links:
       - database
-  database:
-    image: mvertes/alpine-mongo
+  client_web:
+    build: Web
     ports:
-      - "27017:27017"
+      - "4200:4200"
+    volumes:
+      - ./Web:/app/src
+  
